@@ -1,0 +1,24 @@
+.search-results-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.search-results-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.search-results-page__title {
+  margin: 0;
+  color: var(--text-h);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.search-results-page__summary {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.98rem;
+}
