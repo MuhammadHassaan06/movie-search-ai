@@ -1,0 +1,24 @@
+.movie-details-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.movie-details-page__back-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  color: var(--text-h);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.movie-details-page__back-link:hover {
+  color: var(--accent);
+}
+
+.movie-details-page__back-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 0.25rem;
+}
