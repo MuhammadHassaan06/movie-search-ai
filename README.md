@@ -17,59 +17,105 @@ If you are developing a production application, we recommend updating the config
 
 ```js
 export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+  # Movie Search App
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+  ## Overview
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+  Movie Search App is a React and TypeScript application for searching movies using the OMDb API. It presents search results as movie cards and provides dedicated movie detail pages.
 
-```
+  ## Features
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+  - Movie search
+  - OMDb API integration
+  - Search results
+  - Movie cards
+  - Movie details page
+  - Loading states
+  - Error states
+  - Empty states
+  - Responsive UI
+  - Accessible forms and navigation
+  - React Router navigation
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+  ## Tech Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+  - React
+  - TypeScript
+  - Vite
+  - React Router
+  - CSS
+  - OMDb API
+  - ESLint
 
-```
+  ## Project Structure
+
+  - `src/components`: Reusable layout, search, movie, and UI components.
+  - `src/pages`: Page-level views for the home, search results, and movie details routes.
+  - `src/services`: External service integrations, including the OMDb API client.
+  - `src/hooks`: Reusable hooks for movie searching and loading movie details.
+  - `src/types`: Shared TypeScript types for movie data.
+  - `src/utils`: Shared utility functions.
+
+  ## API Configuration
+
+  The application reads the OMDb API key from the `VITE_OMDB_API_KEY` environment variable.
+
+  Create a local `.env` file in the project root:
+
+  ```env
+  VITE_OMDB_API_KEY=your_omdb_api_key
+  ```
+
+  Configure the key locally and do not commit the `.env` file or expose the actual API key in source control.
+
+  ## Installation and Running
+
+  Install dependencies:
+
+  ```bash
+  npm install
+  ```
+
+  After creating `.env` and configuring `VITE_OMDB_API_KEY`, start the development server:
+
+  ```bash
+  npm run dev
+  ```
+
+  ## Production Build
+
+  ```bash
+  npm run build
+  ```
+
+  ## Code Quality
+
+  The project was verified using:
+
+  ```bash
+  npm run lint
+  npm run build
+  ```
+
+  ## AI-Assisted Development
+
+  AI coding assistance was used during development for project architecture planning, component scaffolding, API integration assistance, routing implementation, hooks implementation, UI/UX improvements, accessibility review, and code review and cleanup. The generated implementation was reviewed, manually tested, and verified with the lint and build commands.
+
+  ## AI Prompts / Development Workflow
+
+  Development followed a prompt-driven workflow:
+
+  1. Project analysis and architecture planning
+  2. API service implementation
+  3. Layout and search UI
+  4. Routing
+  5. Search hook and results
+  6. Movie cards/grid
+  7. Movie details
+  8. UI/UX polish
+  9. Final code review
+  10. Manual testing
+
+  ## Notes
+
+  An OMDb API key is required for the application to perform movie searches.
