@@ -1,0 +1,29 @@
+# Capstone Reflection
+
+## What Was Hardest?
+
+The hardest part was not building the first version of the React interface. It was making the application behave like a small production product across several boundaries: the browser, external APIs, local development, and Vercel. The Gemini integration required a deliberate security decision. I kept `GEMINI_API_KEY` behind the server-side `/api/ai/recommend` function instead of exposing it to React, and I used structured output containing `recommendation`, `reason`, `genres`, and `alternatives`. Both the user's input and Gemini's response needed validation, because a successful network request does not guarantee a useful or safe application response.
+
+The local environment exposed another difficult boundary. The Vite development server returned a 404 for `/api/ai/recommend`, which could initially look like an AI or frontend problem. I diagnosed it through the browser Network tab and then ran the application with `npx vercel dev`, allowing the Vite frontend and Vercel serverless function to run together. After that routing issue was fixed, the endpoint returned 502. Instead of changing frontend code randomly, I isolated the external service with direct SDK requests. `gemini-2.5-flash` returned 404, another available model produced a temporary 503, and `gemini-3.6-flash` was directly verified by returning `OK`. That evidence led to the model change used by the production endpoint.
+
+Production routing created a similar lesson. Client-side navigation worked after the first Vercel deployment, but refreshing `/search?q=inception` returned a Vercel 404. The fix was a `vercel.json` rewrite that preserved `/api/*` routing while falling back to `index.html` for the React Router application. These issues were difficult because the code in the browser was often not the part that was actually broken.
+
+## What I Would Do Differently
+
+Next time, I would establish the deployment shape earlier. I would run the complete local application through `npx vercel dev` soon after adding the serverless function, and I would add the SPA rewrite before the first production deployment. I would also document the expected local architecture at the start so that plain Vite development and Vercel-compatible development were clearly distinguished.
+
+I would create the API contract and failure cases before connecting the UI. Defining the request, structured response, validation rules, and safe status codes first would make it easier to test the endpoint independently and reduce uncertainty during integration. I would also set up automated tests earlier, including mocked OMDb and Gemini boundaries, rather than treating testing as a final hardening phase. The final suite includes 19 unit/component tests and 6 Playwright checks, with axe scans for the tested states, but earlier feedback would have made the implementation loop shorter.
+
+I would plan accessibility review from the first component pass as well. The application had good semantic foundations, but the audit found that muted movie metadata had only a 2.53:1 contrast ratio on white. Changing the color to `#64748b` fixed the measured issue and the tested states then passed axe scans. It would have been better to catch that before visual polish was considered complete. I would also add dedicated production error monitoring in a future iteration; currently, the practical tools are Vercel deployment and function logs, browser reproduction, and automated checks.
+
+## What Surprised Me
+
+The most surprising lesson was how much production readiness is separate from feature completion. The movie search and AI assistant could appear finished while route refreshes, environment boundaries, API model availability, metadata, robots.txt, or color contrast still needed attention. Lighthouse made that visible: the initial mobile scores were Performance 96, Accessibility 100, Best Practices 100, and SEO 82. The SEO score was not low because the core experience failed; it was affected by a missing meta description and invalid or missing `robots.txt`. After addressing those small but real deployment details, the final scores were Performance 94, Accessibility 100, Best Practices 100, and SEO 100.
+
+I was also surprised by how useful failure isolation was. When Gemini returned errors, the fastest path was not to assume the React code was wrong. Listing available models and making direct SDK requests separated model availability and temporary service failures from application routing and UI behavior. The same principle applied to E2E tests: mocking OMDb and Gemini made the tests deterministic without pretending that external services are always available.
+
+AI coding assistance was useful for implementation suggestions, test generation assistance, debugging support, accessibility review, and documentation. It did not independently ship the application. I manually reviewed the generated changes and validated them with builds, lint, unit/component tests, Playwright tests, accessibility scans, Lighthouse, and manual production testing.
+
+## Final Takeaway
+
+This project changed my understanding from simply building a React app to intentionally shipping and operating a small production AI product. The final result is not just a set of pages: it has a server-side secret boundary, validated structured AI responses, deterministic tests, accessibility checks, production routing, deployment documentation, and known operational risks. There are still limitations, including dependence on OMDb and Gemini availability, imperfect recommendations, no dedicated third-party monitoring service, and incomplete coverage of every browser and screen reader. Recognizing those limits is part of the engineering work. The production application is live at https://movie-search-ai.vercel.app/.
