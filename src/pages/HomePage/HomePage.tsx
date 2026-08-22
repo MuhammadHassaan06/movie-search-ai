@@ -1,5 +1,6 @@
 import SearchBar from '../../components/search/SearchBar'
 import EmptyState from '../../components/ui/EmptyState'
+import AiAssistant from '../../components/ai/AiAssistant'
 import './HomePage.css'
 
 function HomePage() {
@@ -20,6 +21,8 @@ function HomePage() {
           />
         </div>
       </section>
+
+      <AiAssistant />
 
       <EmptyState
         title="Start with a search"
